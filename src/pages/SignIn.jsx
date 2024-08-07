@@ -11,10 +11,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const SignIn = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const { loading, error } = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -35,11 +35,13 @@ export const SignIn = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
+
+      if (!data.success) {
         dispatch(signInFailure(data.message));
-        toast.error(`Sign In Failed: ${data.message}`);
+        toast.error(data.message); // Show specific error message
         return;
       }
+
       dispatch(signInSuccess(data));
       toast.success("Sign In Successful!");
       navigate("/");
@@ -59,6 +61,7 @@ export const SignIn = () => {
           placeholder="Email"
           className="border p-3 rounded-lg"
           id="email"
+          value={formData.email}
           onChange={handleChange}
         />
         <input
@@ -66,6 +69,7 @@ export const SignIn = () => {
           placeholder="Password"
           className="border p-3 rounded-lg"
           id="password"
+          value={formData.password}
           onChange={handleChange}
         />
 
@@ -79,7 +83,7 @@ export const SignIn = () => {
       </form>
       <div className="flex gap-2 mt-5">
         <p>Don't have an account?</p>
-        <Link to={"/sign-up"}>
+        <Link to="/sign-up">
           <span className="text-blue-700">Sign up</span>
         </Link>
       </div>

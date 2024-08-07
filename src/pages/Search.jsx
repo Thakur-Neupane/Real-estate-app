@@ -244,7 +244,7 @@ export const Search = () => {
           )}
 
           {!loading &&
-            listings &&
+            Array.isArray(listings) &&
             listings.map((listing) => (
               <ListingItem key={listing._id} listing={listing} />
             ))}
@@ -254,7 +254,7 @@ export const Search = () => {
               onClick={onShowMoreClick}
               className="text-green-700 hover:underline p-7 text-center w-full"
             >
-              Show more
+              Show more..
             </button>
           )}
         </div>
